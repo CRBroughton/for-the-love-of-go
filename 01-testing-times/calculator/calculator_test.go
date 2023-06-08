@@ -105,3 +105,42 @@ func TestDivideInvalid(t *testing.T) {
 		t.Error("want error for invalid input, got nil")
 	}
 }
+
+func TestSqrt(t *testing.T) {
+	t.Parallel()
+
+	type testCase struct {
+		a    float64
+		want float64
+	}
+
+	testCases := []testCase{
+		{a: 4, want: 2},
+		{a: 2, want: 1.41421356237},
+		{a: 25, want: 5},
+		{a: 1.4, want: 1.2},
+	}
+
+	for _, testCase := range testCases {
+		got, err := calculator.Sqrt(testCase.a)
+
+		if err != nil {
+			t.Fatalf("want no error for valid input, got %v", err)
+		}
+
+		if !closeEnough(testCase.want, got, 0.1) {
+			t.Errorf("Sqrt(%f): want %f, got %f",
+				testCase.a, testCase.want, got)
+		}
+	}
+}
+
+func TestSqrtInvalid(t *testing.T) {
+	t.Parallel()
+
+	_, err := calculator.Sqrt(-1)
+
+	if err == nil {
+		t.Error("Sqrt(-1): want error for invalid input, got nil")
+	}
+}
