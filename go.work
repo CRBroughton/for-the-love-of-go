@@ -3,4 +3,5 @@ go 1.19
 use (
     ./01-testing-times/calculator
     ./04-happy-fun-books/bookstore
+    ./04-happy-fun-books/mytypes
 )

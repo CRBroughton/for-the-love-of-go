@@ -2,11 +2,21 @@ package bookstore
 
 import "errors"
 
+type Catalog map[int]Book
+
 type Book struct {
-	ID     int
-	Title  string
-	Author string
-	Copies int
+	ID              int
+	PriceCents      int
+	DiscountPercent int
+	Title           string
+	Author          string
+	Copies          int
+}
+
+func (b Book) NetPriceCents() int {
+	savings := b.PriceCents * b.DiscountPercent / 100
+
+	return b.PriceCents - savings
 }
 
 func Buy(b Book) (Book, error) {
@@ -17,12 +27,17 @@ func Buy(b Book) (Book, error) {
 	return b, nil
 }
 
-func GetAllBooks(catalog []Book) []Book {
-	return catalog
+func (c Catalog) GetAllBooks() []Book {
+	result := []Book{}
+
+	for _, b := range c {
+		result = append(result, b)
+	}
+	return result
 }
 
-func GetBook(catalog []Book, ID int) Book {
-	for _, b := range catalog {
+func (c Catalog) GetBook(ID int) Book {
+	for _, b := range c {
 		if b.ID == ID {
 			return b
 		}
