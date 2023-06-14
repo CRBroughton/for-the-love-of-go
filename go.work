@@ -5,4 +5,7 @@ use (
     ./04-happy-fun-books/bookstore
     ./04-happy-fun-books/mytypes
     ./04-happy-fun-books/creditcard
+    ./11-opening-statements/short-variable-declarations
+    ./11-opening-statements/the-happy-path
+    ./11-opening-statements/bool-variables
 )
