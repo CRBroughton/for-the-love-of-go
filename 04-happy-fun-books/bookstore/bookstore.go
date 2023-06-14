@@ -1,6 +1,9 @@
 package bookstore
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type Catalog map[int]Book
 
@@ -25,6 +28,14 @@ func Buy(b Book) (Book, error) {
 	}
 	b.Copies--
 	return b, nil
+}
+
+func (b *Book) SetPriceCents(price int) error {
+	if price < 0 {
+		return fmt.Errorf("negative price %d", price)
+	}
+	b.PriceCents = price
+	return nil
 }
 
 func (c Catalog) GetAllBooks() []Book {
