@@ -5,6 +5,21 @@ import (
 	"fmt"
 )
 
+type Category int
+
+// Go enum
+const (
+	CategoryAutobiography Category = iota
+	CategoryLargePrintRomance
+	CategoryParticlePhysics
+)
+
+var validCategory = map[Category]bool{
+	CategoryAutobiography:     true,
+	CategoryLargePrintRomance: true,
+	CategoryParticlePhysics:   true,
+}
+
 type Catalog map[int]Book
 
 type Book struct {
@@ -14,7 +29,7 @@ type Book struct {
 	Title           string
 	Author          string
 	Copies          int
-	category        string
+	category        Category
 }
 
 func (b Book) NetPriceCents() int {
@@ -39,15 +54,15 @@ func (b *Book) SetPriceCents(price int) error {
 	return nil
 }
 
-func (b *Book) SetCategory(category string) error {
-	if category != "Fiction" {
+func (b *Book) SetCategory(category Category) error {
+	if !validCategory[category] {
 		return fmt.Errorf("unknown category %q", category)
 	}
 	b.category = category
 	return nil
 }
 
-func (b Book) GetCategory() string {
+func (b Book) GetCategory() Category {
 	return b.category
 }
 
