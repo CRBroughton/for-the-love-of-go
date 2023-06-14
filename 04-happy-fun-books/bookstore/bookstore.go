@@ -1,6 +1,24 @@
 package bookstore
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
+
+type Category int
+
+// Go enum
+const (
+	CategoryAutobiography Category = iota
+	CategoryLargePrintRomance
+	CategoryParticlePhysics
+)
+
+var validCategory = map[Category]bool{
+	CategoryAutobiography:     true,
+	CategoryLargePrintRomance: true,
+	CategoryParticlePhysics:   true,
+}
 
 type Catalog map[int]Book
 
@@ -11,6 +29,7 @@ type Book struct {
 	Title           string
 	Author          string
 	Copies          int
+	category        Category
 }
 
 func (b Book) NetPriceCents() int {
@@ -25,6 +44,26 @@ func Buy(b Book) (Book, error) {
 	}
 	b.Copies--
 	return b, nil
+}
+
+func (b *Book) SetPriceCents(price int) error {
+	if price < 0 {
+		return fmt.Errorf("negative price %d", price)
+	}
+	b.PriceCents = price
+	return nil
+}
+
+func (b *Book) SetCategory(category Category) error {
+	if !validCategory[category] {
+		return fmt.Errorf("unknown category %q", category)
+	}
+	b.category = category
+	return nil
+}
+
+func (b Book) GetCategory() Category {
+	return b.category
 }
 
 func (c Catalog) GetAllBooks() []Book {

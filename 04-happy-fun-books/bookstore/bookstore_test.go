@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 func TestBook(t *testing.T) {
@@ -31,7 +32,8 @@ func TestGetAllBooks(t *testing.T) {
 
 	got := catalog.GetAllBooks()
 
-	if !cmp.Equal(want, got) {
+	// the third value ignores any unexported fields on the struct, ie, private fields
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(bookstore.Book{})) {
 		t.Error(cmp.Diff(want, got))
 	}
 }
@@ -57,7 +59,7 @@ func TestGetBook(t *testing.T) {
 
 	got := catalog.GetBook(2)
 
-	if !cmp.Equal(want, got) {
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(bookstore.Book{})) {
 		t.Error(cmp.Diff(want, got))
 	}
 
@@ -119,5 +121,66 @@ func TestNetPriceCents(t *testing.T) {
 
 	if want != got {
 		t.Errorf("want %d, got %d", want, got)
+	}
+}
+
+func TestSetPriceCents(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		Title:      "My First Book",
+		PriceCents: 4000,
+	}
+
+	want := 3000
+
+	err := b.SetPriceCents(want)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := b.PriceCents
+
+	if want != got {
+		t.Errorf("want updated price %d, got %d", want, got)
+	}
+}
+
+func TestSetCategory(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		Title: "My First Book",
+	}
+
+	categories := []bookstore.Category{
+		bookstore.CategoryAutobiography,
+		bookstore.CategoryLargePrintRomance,
+		bookstore.CategoryParticlePhysics,
+	}
+
+	for _, category := range categories {
+		err := b.SetCategory(category)
+
+		if err != nil {
+			t.Fatal(err)
+		}
+		got := b.GetCategory()
+
+		if category != got {
+			t.Errorf("want category %q, got %q", category, got)
+		}
+	}
+}
+
+func TestSetCategoryInvalid(t *testing.T) {
+	t.Parallel()
+	b := bookstore.Book{
+		Title: "For the Love of Go",
+	}
+	err := b.SetCategory(999)
+	if err == nil {
+		t.Fatal("want error for invalid category, got nil")
 	}
 }
