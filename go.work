@@ -8,4 +8,8 @@ use (
     ./11-opening-statements/short-variable-declarations
     ./11-opening-statements/the-happy-path
     ./11-opening-statements/bool-variables
+    ./11-opening-statements/switch
+    ./11-opening-statements/range
+    ./11-opening-statements/for
+    ./11-opening-statements/non-negative
 )
