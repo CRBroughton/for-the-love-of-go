@@ -12,4 +12,7 @@ use (
     ./11-opening-statements/range
     ./11-opening-statements/for
     ./11-opening-statements/non-negative
+    ./13-fun-functions/return
+    ./13-fun-functions/apply
+    ./13-fun-functions/variadic
 )
